@@ -1,8 +1,8 @@
 // function to generate markdown for README
+const badges = require('../badgeData')
 const inquirer = require('inquirer');
 const fs = require('fs');
-const Choice = require('inquirer/lib/objects/choice');
-const Choices = require('inquirer/lib/objects/choices');
+const { npmBadge, mozilla } = require('../badgeData');
 
 function generateMarkdown() {
   //   
@@ -36,34 +36,54 @@ function generateMarkdown() {
       message: 'Usage: '
     },
     {
-      type: 'list',
-      name: 'bage',
-      message: 'Which license bage?',
+      type: 'checkbox',
+      message: 'Select Badges',
+      name: 'License',
       choices: [
-        'This one',
-        'That one',
-        'none one',
-        'I dont know what that is'
-      ]
-    },
-    {
-      type: 'input',
-      name: 'file',
-      message: 'What is the name of the file you would like to write/create?'
-    },
-  ];
+        new inquirer.Separator(' = Choose a license = '),
+        {
+          name: 'Mozilla',
+        },
+        {
+          name: 'GitHub',
+        },
+        {
+          name: 'Packagist',
+        },
+        {
+          name: 'Inquirer',
+        },
+        
+  ],
+  
+}]
+
+
   inquirer.prompt(questions).then(answers => {
-    // if(answers.choices[1]){
-    //   console.log('successfully used choices');
+    //console.log(status('Status'));
+    let badgetype 
+    const userAns = answers;
+    console.log('before license log');
+    const licenses = userAns.License[0]+ ' '+ 
+                     userAns.License[1]+ ' '+ 
+                     userAns.License[2]+ ' '+
+                     userAns.License[3];
+    console.log(licenses);
+    // for(let i = 0; answers.License.length; i ++){
+    //   console.log(answers.License[1]);
     // }
-    const readMe = answers.file;
-    const dataToFile = answers.Project_title + 
-    '\n==============\n' + answers.Description + 
-    '\n==============\n' + answers.tbContents + 
-    '\n==============\n' + answers.install + 
-    '\n==============\n' + answers.usage +
-    "\n==============\n";
-    writeToFile(readMe + '.md', dataToFile);
+    const readMe = 'README.md';
+    const dataToFile = badgetype +
+    'Badges\n'+'==============\n'+ licenses +'\n'+
+    'Title:\n'+'==============\n'+answers.Project_title + '\n'+
+    'Decription:\n'+'==============\n' + answers.Description + '\n'+
+    'Table of Contents:\n'+'==============\n' + answers.tbContents + '\n'+
+    'Installation:\n'+'==============\n' + answers.install + '\n'+
+    'Usage:\n'+'==============\n' + answers.usage +'\n'+
+    "contibutiing:\n"+"==============\n" +'\n'+
+    'Testing:\n'+'==============\n' + '' + '\n'+
+    'Questions: \n'+'==============\n';
+    writeToFile(readMe, dataToFile);
 
 
   }).catch(error => {
