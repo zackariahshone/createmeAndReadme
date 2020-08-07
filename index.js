@@ -1,5 +1,5 @@
 const gm  = require('./utils/generateMarkdown');
-
+const gitHub = require('./github')
 
 // the title of your project and sections entitled Description, 
 //Table of Contents, Installation, Usage, License, Contributing, 
@@ -8,7 +8,8 @@ const gm  = require('./utils/generateMarkdown');
 //const questions = gm.gM();
 //console.log(questions);
 function init() {
-gm.gM();    
+  gm.gM();    
+  
 }
 init();
 

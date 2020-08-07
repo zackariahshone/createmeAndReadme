@@ -2,7 +2,8 @@
 const badges = require('../badgeData')
 const inquirer = require('inquirer');
 const fs = require('fs');
-const { npmBadge, mozilla } = require('../badgeData');
+const { mozilla, boost } = require('../badgeData');
+const github = require('../github');
 
 function generateMarkdown() {
   //   
@@ -42,7 +43,7 @@ function generateMarkdown() {
       choices: [
         new inquirer.Separator(' = Choose a license = '),
         {
-          name: 'Mozilla',
+          name: 'Mozzilla',
         },
         {
           name: 'GitHub',
@@ -55,25 +56,35 @@ function generateMarkdown() {
         },
         
   ],
-  
+  status: function (choices) {
+    return 'Total = ' + _.sum(_.map(choices.where({ checked: true }), 'value'))
+  }
 }]
 
 
   inquirer.prompt(questions).then(answers => {
-    //console.log(status('Status'));
-    let badgetype 
+    //console.log(status('Status')); 
+    let badges = '';
     const userAns = answers;
-    console.log('before license log');
-    const licenses = userAns.License[0]+ ' '+ 
-                     userAns.License[1]+ ' '+ 
-                     userAns.License[2]+ ' '+
-                     userAns.License[3];
-    console.log(licenses);
-    // for(let i = 0; answers.License.length; i ++){
-    //   console.log(answers.License[1]);
-    // }
+    
+    console.log(mozilla);
+
+    const licenses = userAns.License[0];
+    const licenseO = userAns.License[1]; 
+    const licenseT = userAns.License[2];
+    const licenseTh= userAns.License[3];
+
+    if (licenses === 'Mozzilla'){
+      badges = mozilla;
+    }
+    if(licenseO === 'GitHub'){
+      badges += boost;
+    }else{}
+    console.log('badges ' + badges);
+    
+    
     const readMe = 'README.md';
-    const dataToFile = badgetype +
+    const dataToFile = badges +
     'Badges\n'+'==============\n'+ licenses +'\n'+
     'Title:\n'+'==============\n'+answers.Project_title + '\n'+
     'Decription:\n'+'==============\n' + answers.Description + '\n'+
